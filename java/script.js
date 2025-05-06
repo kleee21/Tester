@@ -1,21 +1,40 @@
-function showSlide(index) {
-  slides.forEach((slide, i) => {
-    slide.classList.toggle('active', i === index);
+document.addEventListener('DOMContentLoaded', () => {
+    const toggleBtn = document.getElementById('menu-toggle');
+    const mobileLinks = document.getElementById('mobile-links');
+  
+    toggleBtn.addEventListener('click', () => {
+      const icon = toggleBtn.querySelector('ion-icon');
+      icon.name = icon.name === 'menu' ? 'close' : 'menu';
+      mobileLinks.classList.toggle('hidden');
+    });
+  
+    const track = document.getElementById("carousel-track");
+    const slides = track.children;
+    let index = 0;
+  
+    function updateCarousel() {
+      const width = slides[0].clientWidth;
+      track.style.transform = `translateX(-${index * width}px)`;
+    }
+  
+    document.getElementById("next").addEventListener("click", () => {
+      index = (index + 1) % slides.length;
+      updateCarousel();
+    });
+  
+    document.getElementById("prev").addEventListener("click", () => {
+      index = (index - 1 + slides.length) % slides.length;
+      updateCarousel();
+    });
+  
+    setInterval(() => {
+      index = (index + 1) % slides.length;
+      updateCarousel();
+    }, 5000);
+  
+    window.addEventListener("resize", updateCarousel);
+    updateCarousel(); // Initial position fix
   });
-}
-
-function nextSlide() {
-  currentSlide = (currentSlide + 1) % slides.length;
-  showSlide(currentSlide);
-}
-
-function prevSlide() {
-  currentSlide = (currentSlide - 1 + slides.length) % slides.length;
-  showSlide(currentSlide);
-}
-
-// Auto slide every 5 seconds
-setInterval(nextSlide, 5000);
 
 // Show first slide on load
 document.addEventListener('DOMContentLoaded', () => {
@@ -38,10 +57,11 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
 const navLinks = document.querySelector('.nav-links')
-function onToggleMenu(e){
-    e.name = e.name === 'menu' ? 'close' : 'menu'
-    navLinks.classList.toggle('top-[9%]')
-}
+function onToggleMenu(e) {
+    e.name = e.name === 'menu' ? 'close' : 'menu';
+    navLinks.classList.toggle('top-[-100%]');
+    navLinks.classList.toggle('top-[9%]');
+  }
 
 // js/auth.js
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
@@ -123,3 +143,5 @@ logoutBtn.addEventListener("click", () => {
       }
 
       window.addEventListener("resize", updateCarousel);
+
+      
